@@ -35,7 +35,7 @@
         <div
           class="bg-brown p-3 w-100 text-white rounded-bottom d-flex justify-content-between"
         >
-          <span> Melakukan Reservasi Lapangan </span>
+          <span> Melakukan Reservasi Tiket Kereta Api </span>
           <button
             class="btn text-white"
             data-bs-toggle="modal"
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div class="w-100">
-          <h4 class="my-3">Melakukan Reservasi Lapangan</h4>
+          <h4 class="my-3">Melakukan Reservasi Tiket Kereta Api</h4>
           <input
             type="text"
             name="nama"
@@ -78,25 +78,29 @@
             id="nama"
             required
           />
-          <span>Lapangan</span>
-          <select name="lapangan" class="form-control mb-4" id="">
-            <option disabled value="" selected>Pilih Lapangan</option>
+          <span>Kereta Api</span>
+          <select name="lapangan" class="form-control mb-4" id="" disabled>
+            <option disabled value="" selected>Argo Bromo Express</option>
             <option>A</option>
             <option>B</option>
             <option>C</option>
             <option>D</option>
             <option>E</option>
           </select>
-          <span>Tanggal Penyewaan</span>
-          <input
+          <span>Nomor Kursi</span>
+          <select name="lapangan" class="form-control mb-4" id="" disabled>
+            <option disabled value="" selected>A1</option>
+          </select>
+          <span>Tanggal Pemesanan</span>
+          <!-- <input
             type="date"
             name="tanggal"
             class="form-control rounded mb-4"
             placeholder="Tanggal"
             id="tanggal"
             required
-          />
-          <span>Jam Penyewaan</span>
+          /> -->
+          <span>Jam Kereta Api</span>
           <select
             type="number"
             name="penyewaan"
@@ -104,9 +108,8 @@
             disabled
             placeholder="Isi Jam Penyewaan"
             id="penyewaan"
-            required
           >
-            <option value="" selected>Pilih Jam Penyewaan</option>
+            <option value="" selected>16.00</option>
           </select>
           <input
             type="hidden"

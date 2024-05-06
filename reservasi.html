@@ -133,10 +133,29 @@
               isReserved = true;
             }
           });
+          console.log(index);
           if (isReserved) {
-            str += 'btn-danger m-1"> ' + index + ":00</button>";
+            if (index % 2 != 0) {
+              str +=
+                'btn-danger btn-block m-1"> ' +
+                element +
+                index +
+                "</button> <br />";
+            } else {
+              str +=
+                'btn-danger btn-block m-1"> ' + element + index + "</button>";
+            }
           } else {
-            str += 'btn-success m-1"> ' + index + ":00</button>";
+            if (index % 2 != 0) {
+              str +=
+                'btn-success btn-block m-1"> ' +
+                element +
+                index +
+                "</button> <br />";
+            } else {
+              str +=
+                'btn-success btn-block m-1"> ' + element + index + "</button>";
+            }
           }
           listJamString += str;
         }

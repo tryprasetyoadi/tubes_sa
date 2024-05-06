@@ -33,7 +33,7 @@
       <div
         class="bg-brown p-3 w-100 text-white rounded-bottom d-flex justify-content-between"
       >
-        <span> Melakukan Reservasi Lapangan </span>
+        <span> Riwayat Pemesanan Kereta Api </span>
         <button
           class="btn text-white"
           data-bs-toggle="modal"
@@ -66,8 +66,12 @@
       </div>
       <div class="w-100">
         <h4 class="my-3">Riwayat Reservasi</h4>
-        <ul class="list-group" id="riwayat">
-          
+        <ul class="list-group" id="">
+          <li class="list-group-item">
+            Kereta Argo Bromo Express <br />
+            01-05-2024 <br />
+            Kursi : A1
+          </li>
         </ul>
       </div>
       <div
@@ -95,8 +99,16 @@
         alert(xhr.responseText);
       },
     }).done(function (data) {
-      data.forEach(element => {
-        $("#riwayat").append(' <li class="list-group-item"> Lapangan '+element.lapangan+' <br /> '+element.tanggal+' <br /> '+element.jam_penyewaan+':00 </li> ')
+      data.forEach((element) => {
+        $("#riwayat").append(
+          ' <li class="list-group-item"> Lapangan ' +
+            element.lapangan +
+            " <br /> " +
+            element.tanggal +
+            " <br /> " +
+            element.jam_penyewaan +
+            ":00 </li> "
+        );
       });
     });
   });

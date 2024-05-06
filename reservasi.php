@@ -1,9 +1,9 @@
 <?php
 include 'config.php';
 
-if ($_POST['function'] == 'reservasi') {
+if (isset($_POST['function']) && $_POST['function']  == "reservasi") {
     echo json_encode(reservasi($conn));
-} else if ($_GET['tanggal']) {
+} else if (isset($_GET['tanggal'])) {
     echo json_encode(cekJadwalKosong($_GET['tanggal'], $conn));
 } else {
     echo json_encode(riwayat($conn));
