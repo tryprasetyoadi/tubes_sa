@@ -1,0 +1,50 @@
+.page {
+    padding: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 100vh;
+}
+
+.btn-menu{
+    min-width: 100px;
+}
+@media only screen and (max-width: 600px)  {
+    .page{
+        padding: 0  ;
+    }
+    .btn-menu{    
+        min-width: 0px;
+    }
+}
+.forms {
+    height: 100%;
+}
+
+.btn-brown {
+    background-color: rgb(192, 154, 65);
+    color: white;
+}
+
+.btn-brown:hover {
+    background-color: rgb(174, 136, 47);
+    color: white;
+}
+
+.btn-brown-outline {
+    border: 1px solid rgb(192, 154, 65);
+    color: rgb(192, 154, 65);
+}
+
+.btn-brown-outline:hover {
+    border: 1px solid rgb(174, 136, 47);
+    color: rgb(174, 136, 47);
+}
+
+.bg-brown{
+    background-color: rgb(192, 154, 65);;
+}
+
+.text-brown{
+    text: rgb(192, 154, 65);
+}

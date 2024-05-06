@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://kit.fontawesome.com/add3d2a7df.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div class="page d-flex align-items-end flex-column py-0">
+      <div
+        class="bg-brown p-3 w-100 text-white rounded-bottom d-flex justify-content-between"
+      >
+        <span> Melakukan Reservasi Lapangan </span>
+        <button
+          class="btn text-white"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          <i class="fa-solid fa-bell"></i>
+        </button>
+        <div
+          class="modal fade"
+          id="exampleModal"
+          tabindex="-1"
+          aria-labelledby="exampleModalLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-dark">Belum Ada Notifikasi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-100 py-3">
+        <h3>Tanggal:</h3>
+        <input type="date" class="form-control" id="tanggal" />
+        <h4 class="my-3">Lapangan yang tersedia saat ini :</h4>
+        <ul class="list-group" id="listlapangan"></ul>
+      </div>
+      <div
+        class="bg-brown p-3 px-sm-0 mt-auto w-100 d-flex justify-content-around"
+      >
+        <a href="#" class="btn btn-success py-2 btn-menu disabled"
+          >Ketersediaan</a
+        >
+        <a href="reservasi_form.html" class="btn btn-success py-2 btn-menu"
+          >Reservasi</a
+        >
+        <a href="riwayat.html" class="btn btn-success py-2 btn-menu">Riwayat</a>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+  const lapangan = ["A", "B", "C", "D", "E"];
+  function getJadwal(date = formatDate(Date.now())) {
+    $("#listlapangan").html("");
+    lapangan.forEach((element) => {
+      let list =
+        '<li class="list-group-item">Lapangan ' +
+        element +
+        '<br/> <img style="width:200px" src="' +
+        element +
+        '.jpeg"> </img>';
+      let listJam = [];
+      let listJamString = "<br/> Jam Ketersediaan: <br/>";
+      let listEnd = "</li>";
+      $.ajax({
+        type: "GET",
+        url: "reservasi.php",
+        dataType: "json",
+        encode: true,
+        error: function (xhr, ajaxOptions, thrownError) {
+          alert(xhr.responseText);
+        },
+      }).done(function (data) {
+        data.forEach((element2) => {
+          if (element == element2.lapangan) {
+            if (date == element2.tanggal) {
+              listJam.push(element2.jam_penyewaan);
+            }
+          }
+        });
+        for (let index = 0; index < 24; index++) {
+          let isReserved = false;
+          let str = '<button class="p-1 btn ';
+          listJam.forEach((element) => {
+            if (element == index) {
+              isReserved = true;
+            }
+          });
+          if (isReserved) {
+            str += 'btn-danger m-1"> ' + index + ":00</button>";
+          } else {
+            str += 'btn-success m-1"> ' + index + ":00</button>";
+          }
+          listJamString += str;
+        }
+        $("#listlapangan").append(list + listJamString + listEnd);
+      });
+    });
+  }
+
+  $(document).ready(function () {
+    getJadwal();
+    $("#tanggal").on("change", function () {
+      getJadwal($(this).val());
+    });
+  });
+</script>

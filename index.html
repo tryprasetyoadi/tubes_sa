@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <form method="post" action="login.php">
+      <div class="page d-flex align-items-end flex-column">
+        <div class="w-100">
+          <center>
+            <img src="ball.png" style="width: 8rem" alt="" />
+          </center>
+          <div class="mb-5">
+            <h2>Login</h2>
+            <span>Reservasi Lapangan</span>
+          </div>
+          <center>
+            <input
+              type="text"
+              name="email"
+              class="form-control rounded mb-4"
+              placeholder="Email"
+              id=""
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              class="form-control rounded"
+              placeholder="Password"
+              id=""
+              required
+            />
+            <div class="d-flex justify-content-end w-100">
+              <a class="mb-5 d-block float-right">Lupa kata sandi?</a>
+            </div>
+          </center>
+        </div>
+        <button
+        type="submit"
+          class="btn btn-brown mb-2 mt-auto d-block p-2 rounded-pill w-100"
+          >Log In</button
+        >
+        <a
+        href="register.html"
+          class="btn btn-brown-outline mb-4 d-block p-2 rounded-pill w-100"
+        >
+          Daftar
+      </a>
+        <!-- <button type="submit" class="btn btn-brown mb-2 mt-auto d-block p-2 rounded-pill w-100">Log In</button>
+        <button type="button" class="btn btn-brown-outline mb-4 d-block p-2 rounded-pill w-100">Daftar</button> -->
+      </div>
+    </form>
+  </body>
+</html>

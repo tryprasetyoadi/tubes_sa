@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://kit.fontawesome.com/add3d2a7df.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.0.min.js"
+      integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <form id="formReservasi">
+      <div class="page d-flex align-items-end flex-column py-0">
+        <div
+          class="bg-brown p-3 w-100 text-white rounded-bottom d-flex justify-content-between"
+        >
+          <span> Melakukan Reservasi Lapangan </span>
+          <button
+            class="btn text-white"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            <i class="fa-solid fa-bell"></i>
+          </button>
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Modal title
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body text-dark">Belum Ada Notifikasi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-100">
+          <h4 class="my-3">Melakukan Reservasi Lapangan</h4>
+          <input
+            type="text"
+            name="nama"
+            class="form-control rounded mb-4"
+            placeholder="Nama"
+            id="nama"
+            required
+          />
+          <span>Lapangan</span>
+          <select name="lapangan" class="form-control mb-4" id="">
+            <option disabled value="" selected>Pilih Lapangan</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>E</option>
+          </select>
+          <span>Tanggal Penyewaan</span>
+          <input
+            type="date"
+            name="tanggal"
+            class="form-control rounded mb-4"
+            placeholder="Tanggal"
+            id="tanggal"
+            required
+          />
+          <span>Jam Penyewaan</span>
+          <select
+            type="number"
+            name="penyewaan"
+            class="form-control rounded mb-4"
+            disabled
+            placeholder="Isi Jam Penyewaan"
+            id="penyewaan"
+            required
+          >
+            <option value="" selected>Pilih Jam Penyewaan</option>
+          </select>
+          <input
+            type="hidden"
+            name="function"
+            value="reservasi"
+            id="reservasi"
+            required
+          />
+          <button class="btn btn-success">Submit</button>
+          <div id="alert-berhasil" class="alert alert-success my-5 d-none">
+            Berhasil Reservasi
+          </div>
+        </div>
+        <div
+          class="bg-brown p-3 px-sm-0 mt-auto w-100 d-flex justify-content-around"
+        >
+          <a href="reservasi.html" class="btn btn-success py-2 btn-menu"
+            >Ketersediaan</a
+          >
+          <a href="#" class="btn btn-success py-2 btn-menu disabled"
+            >Reservasi</a
+          >
+          <a href="riwayat.html" class="btn btn-success py-2 btn-menu"
+            >Riwayat</a
+          >
+        </div>
+      </div>
+    </form>
+  </body>
+</html>
+<script>
+  $("#formReservasi").on("submit", function (e) {
+    e.preventDefault();
+    const arrayForm = $("form").serializeArray();
+    let formData = {};
+    arrayForm.forEach((element) => {
+      formData[element.name] = element.value;
+    });
+    console.log(formData);
+    $.ajax({
+      type: "POST",
+      url: "reservasi.php",
+      data: formData,
+      dataType: "json",
+      encode: true,
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        alert(xhr.responseText);
+      },
+    }).done(function (data) {
+      $("#alert-berhasil").removeClass("d-none");
+    });
+  });
+  $("#tanggal").change(function () {
+    $("#penyewaan").prop("disabled", true);
+    $("#penyewaan").prop("value", "");
+    $("#penyewaan").html(
+      '<option value="" selected>Pilih Jam Penyewaan</option>'
+    );
+    const tgl = $(this).val();
+    $.ajax({
+      type: "GET",
+      url: "reservasi.php",
+      data: {
+        tanggal: tgl,
+      },
+      dataType: "json",
+      encode: true,
+      error: function (xhr, ajaxOptions, thrownError) {
+        console.log(thrownError);
+        alert(xhr.responseText);
+      },
+    }).done(function (data) {
+      $("#penyewaan").prop("disabled", false);
+      for (let index = 0; index < 25; index++) {
+        let option = '<option value="' + index + '">' + index + ":00</option>";
+        data.forEach((element) => {
+          if (element == index) {
+            option = "<option disabled>" + index + ":00</option>";
+          }
+        });
+        $("#penyewaan").append(option);
+      }
+    });
+  });
+  $(document).ready(function () {});
+</script>
