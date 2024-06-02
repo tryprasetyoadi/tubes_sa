@@ -66,13 +66,7 @@
       </div>
       <div class="w-100">
         <h4 class="my-3">Riwayat Reservasi</h4>
-        <ul class="list-group" id="">
-          <li class="list-group-item">
-            Kereta Argo Bromo Express <br />
-            01-05-2024 <br />
-            Kursi : A1
-          </li>
-        </ul>
+        <ul class="list-group" id="riwayat"></ul>
       </div>
       <div
         class="bg-brown p-3 px-sm-0 mt-auto w-100 d-flex justify-content-around"
@@ -80,9 +74,7 @@
         <a href="reservasi.html" class="btn btn-success py-2 btn-menu"
           >Ketersediaan</a
         >
-        <a href="reservasi_form.html" class="btn btn-success py-2 btn-menu"
-          >Reservasi</a
-        >
+
         <a href="#" class="btn btn-success py-2 btn-menu disabled">Riwayat</a>
       </div>
     </div>
@@ -101,13 +93,13 @@
     }).done(function (data) {
       data.forEach((element) => {
         $("#riwayat").append(
-          ' <li class="list-group-item"> Lapangan ' +
-            element.lapangan +
-            " <br /> " +
+          ' <li class="list-group-item"> Kereta : ' +
+            element.kereta +
+            " <br /> Tanggal : " +
             element.tanggal +
-            " <br /> " +
-            element.jam_penyewaan +
-            ":00 </li> "
+            " <br /> Kursi : " +
+            element.kursi +
+            " </li> "
         );
       });
     });

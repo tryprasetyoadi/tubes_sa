@@ -79,38 +79,30 @@
             required
           />
           <span>Kereta Api</span>
-          <select name="lapangan" class="form-control mb-4" id="" disabled>
-            <option disabled value="" selected>Argo Bromo Express</option>
-            <option>A</option>
-            <option>B</option>
-            <option>C</option>
-            <option>D</option>
-            <option>E</option>
-          </select>
+          <input
+            type="text"
+            name="kereta"
+            class="form-control mb-4"
+            id="kereta"
+            disabled
+          />
           <span>Nomor Kursi</span>
-          <select name="lapangan" class="form-control mb-4" id="" disabled>
-            <option disabled value="" selected>A1</option>
-          </select>
+          <input
+            type="text"
+            name="kursi"
+            class="form-control mb-4"
+            id="kursi"
+            disabled
+          />
           <span>Tanggal Pemesanan</span>
-          <!-- <input
-            type="date"
+          <input
+            type="text"
             name="tanggal"
             class="form-control rounded mb-4"
-            placeholder="Tanggal"
             id="tanggal"
-            required
-          /> -->
-          <span>Jam Kereta Api</span>
-          <select
-            type="number"
-            name="penyewaan"
-            class="form-control rounded mb-4"
             disabled
-            placeholder="Isi Jam Penyewaan"
-            id="penyewaan"
-          >
-            <option value="" selected>16.00</option>
-          </select>
+          />
+
           <input
             type="hidden"
             name="function"
@@ -138,62 +130,84 @@
         </div>
       </div>
     </form>
+
+    <script>
+      function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+          kereta: params.get("kereta"),
+          kursi: params.get("kursi"),
+          tanggal: params.get("tanggal"),
+        };
+      }
+
+      $(document).ready(function () {
+        const { kereta, kursi, tanggal } = getQueryParams();
+        if (kereta) $("#kereta").val(kereta);
+        if (kursi) $("#kursi").val(kursi);
+        if (tanggal) $("#tanggal").val(tanggal);
+
+        $("#formReservasi").on("submit", function (e) {
+          e.preventDefault();
+          const arrayForm = $("form").serializeArray();
+          console.log(arrayForm);
+          let formData = {};
+          arrayForm.forEach((element) => {
+            formData[element.name] = element.value;
+            formData["kereta"] = kereta;
+            formData["kursi"] = kursi;
+            formData["tanggal"] = tanggal;
+          });
+          console.log(formData);
+          $.ajax({
+            type: "POST",
+            url: "reservasi.php",
+            data: formData,
+            dataType: "json",
+            encode: true,
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(thrownError);
+              alert(xhr.responseText);
+            },
+          }).done(function (data) {
+            $("#alert-berhasil").removeClass("d-none");
+          });
+        });
+
+        $("#tanggal").change(function () {
+          $("#penyewaan").prop("disabled", true);
+          $("#penyewaan").prop("value", "");
+          $("#penyewaan").html(
+            '<option value="" selected>Pilih Jam Penyewaan</option>'
+          );
+          const tgl = $(this).val();
+          $.ajax({
+            type: "GET",
+            url: "reservasi.php",
+            data: {
+              tanggal: tgl,
+            },
+            dataType: "json",
+            encode: true,
+            error: function (xhr, ajaxOptions, thrownError) {
+              console.log(thrownError);
+              alert(xhr.responseText);
+            },
+          }).done(function (data) {
+            $("#penyewaan").prop("disabled", false);
+            for (let index = 0; index < 25; index++) {
+              let option =
+                '<option value="' + index + '">' + index + ":00</option>";
+              data.forEach((element) => {
+                if (element == index) {
+                  option = "<option disabled>" + index + ":00</option>";
+                }
+              });
+              $("#penyewaan").append(option);
+            }
+          });
+        });
+      });
+    </script>
   </body>
 </html>
-<script>
-  $("#formReservasi").on("submit", function (e) {
-    e.preventDefault();
-    const arrayForm = $("form").serializeArray();
-    let formData = {};
-    arrayForm.forEach((element) => {
-      formData[element.name] = element.value;
-    });
-    console.log(formData);
-    $.ajax({
-      type: "POST",
-      url: "reservasi.php",
-      data: formData,
-      dataType: "json",
-      encode: true,
-      error: function (xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-        alert(xhr.responseText);
-      },
-    }).done(function (data) {
-      $("#alert-berhasil").removeClass("d-none");
-    });
-  });
-  $("#tanggal").change(function () {
-    $("#penyewaan").prop("disabled", true);
-    $("#penyewaan").prop("value", "");
-    $("#penyewaan").html(
-      '<option value="" selected>Pilih Jam Penyewaan</option>'
-    );
-    const tgl = $(this).val();
-    $.ajax({
-      type: "GET",
-      url: "reservasi.php",
-      data: {
-        tanggal: tgl,
-      },
-      dataType: "json",
-      encode: true,
-      error: function (xhr, ajaxOptions, thrownError) {
-        console.log(thrownError);
-        alert(xhr.responseText);
-      },
-    }).done(function (data) {
-      $("#penyewaan").prop("disabled", false);
-      for (let index = 0; index < 25; index++) {
-        let option = '<option value="' + index + '">' + index + ":00</option>";
-        data.forEach((element) => {
-          if (element == index) {
-            option = "<option disabled>" + index + ":00</option>";
-          }
-        });
-        $("#penyewaan").append(option);
-      }
-    });
-  });
-  $(document).ready(function () {});
-</script>

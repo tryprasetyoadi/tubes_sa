@@ -1,20 +1,22 @@
 <?php
 include 'config.php';
+header('Content-Type: application/json');
 
-if (isset($_POST['function']) && $_POST['function']  == "reservasi") {
+if (isset($_POST['function']) && $_POST['function'] == "reservasi") {
     echo json_encode(reservasi($conn));
-} else if (isset($_GET['tanggal'])) {
+} elseif (isset($_GET['tanggal'])) {
     echo json_encode(cekJadwalKosong($_GET['tanggal'], $conn));
 } else {
     echo json_encode(riwayat($conn));
 }
 
-function cekJadwalKosong($tanggal = null, $conn)
+function cekJadwalKosong($tanggal, $conn)
 {
     if ($tanggal == null) {
         $tanggal = date("Y-m-d");
     }
-    $query = "SELECT * FROM `reservasi` WHERE `tanggal` = '$tanggal';";
+    $tanggal = $conn->real_escape_string($tanggal);
+    $query = "SELECT jam_penyewaan FROM `reservasi` WHERE `tanggal` = '$tanggal';";
     $result = $conn->query($query);
     $rows = [];
     if ($result) {
@@ -22,60 +24,26 @@ function cekJadwalKosong($tanggal = null, $conn)
             $rows[] = $row['jam_penyewaan'];
         }
     }
-    $response = $rows;
-    if ($rows == null) {
-        $response = [];
-    }
-    return $response;
+    return $rows;
 }
-
-
-// function cariJadwalTerdekat($tanggal)
-// {
-// }
-
-
-// function reservasiLapanganFutsalBruteForce($tanggal)
-// {
-//     if (cekJadwalKosong($tanggal)) {
-
-//         echo "Reservasi lapangan futsal berhasil!";
-//     } else {
-//         $jadwalTerdekat = cariJadwalTerdekat($tanggal);
-//         $jumlahHari = 1;
-
-
-//         while (!$jadwalTerdekat && $jumlahHari <= 7) {
-//             $tanggalBerikutnya = date('Y-m-d', strtotime($tanggal . ' + ' . $jumlahHari . ' days'));
-//             $jadwalTerdekat = cariJadwalTerdekat($tanggalBerikutnya);
-//             $jumlahHari++;
-//         }
-
-//         if ($jadwalTerdekat) {
-
-//             echo "Reservasi lapangan futsal berhasil untuk jadwal: " . $jadwalTerdekat;
-//         } else {
-//             // Tidak ada jadwal kosong yang tersedia dalam 7 hari ke depan
-//             echo "Tidak ada jadwal kosong yang tersedia dalam 7 hari ke depan.";
-//         }
-//     }
-// }
-
-// // Contoh penggunaan
-// $tanggalYangDiinginkan = "2023-05-30";
-// reservasiLapanganFutsalBruteForce($tanggalYangDiinginkan);
 
 function reservasi($conn)
 {
-    $query = "INSERT INTO `reservasi` (nama,lapangan,tanggal,jam_penyewaan,durasi) VALUES ('$_POST[nama]','$_POST[lapangan]', '$_POST[tanggal]', '$_POST[penyewaan]', '1');";
+    $nama = $conn->real_escape_string($_POST['nama']);
+    $kereta = $conn->real_escape_string($_POST['kereta']);
+    $tanggal = $conn->real_escape_string($_POST['tanggal']);
+    $kursi = $conn->real_escape_string($_POST['kursi']);
+
+    $query = "INSERT INTO `reservasi` (nama, kereta, tanggal, kursi, confirm) VALUES ('$nama', '$kereta', '$tanggal', '$kursi', '1');";
+
     if (mysqli_query($conn, $query)) {
         http_response_code(200);
-        return "Berhasil Reservasi";
+        return ["message" => "Berhasil Reservasi"];
     } else {
         http_response_code(400);
-        return "Reservasi gagal, cek data anda kembali atau lapangan tidak tersedia!";
-    };
-};
+        return ["message" => "Reservasi gagal, cek data anda kembali atau kereta api tidak tersedia!"];
+    }
+}
 
 function riwayat($conn)
 {
@@ -85,6 +53,5 @@ function riwayat($conn)
     while ($row = $result->fetch_assoc()) {
         $rows[] = $row;
     }
-    $response = $rows;
-    return $response;
-};
+    return $rows;
+}
